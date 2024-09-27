@@ -32,7 +32,7 @@ class UserChangeForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ["full_name", "password", "is_active", "is_admin"]
+        fields = ["phone", "password", "is_active", "is_admin"]
 
 
 class RegisterForm(forms.Form):
@@ -40,7 +40,7 @@ class RegisterForm(forms.Form):
 
 
 class OtpVerifyForm(forms.Form):
-    code = forms.CharField(widget=forms.TextInput(attrs={'class': 'peer w-full rounded-lg border-none bg-transparent p-4 text-left placeholder-transparent focus:outline-none focus:ring-0'}))
+    code = forms.CharField(widget=forms.TextInput(attrs={'class': 'peer w-full rounded-lg border-none bg-transparent p-4 text-left placeholder-transparent focus:outline-none focus:ring-0'}), max_length=5)
 
 
 class LoginForm(forms.Form):
