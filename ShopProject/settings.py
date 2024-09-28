@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     "HomeApp.apps.HomeappConfig",
     "AccountApp.apps.AccountappConfig",
     "ProfileApp.apps.ProfileappConfig",
+    "ProductApp.apps.ProductappConfig",
 ]
 
 MIDDLEWARE = [
