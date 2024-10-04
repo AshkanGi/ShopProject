@@ -936,7 +936,7 @@
     <div class="container">
         <div class="mx-auto max-w-[450px] rounded-xl bg-muted p-5 shadow-base md:p-10">
             <!-- Logo -->
-            <a href="#"><img src="{% static 'assets/images/logo.svg' %}" class="mx-auto mb-10 w-40" alt=""/></a>
+            <a href="{% url 'HomeApp:Home' %}"><img src="{% static 'assets/images/logo.svg' %}" class="mx-auto mb-10 w-40" alt=""/></a>
             <h1 style="font-size: x-large" class="mb-10 text-center text-lg"> کد تایید را وارد کنید </h1>
             <form method="post">
                 {% csrf_token %}
@@ -944,10 +944,11 @@
                     <label for="username" class="relative block rounded-lg border shadow-base">
                         {{ form.code }}
                     </label>
-                    <p class="h-5 text-sm text-red-500 dark:text-red-400">{{ form.code.errors }}</p>
+                    <p class="h-5 text-sm text-red-500 dark:text-red-400">
+                        {{ form.code.errors }}
+                    </p>
                 </div>
                 <ul class="mb-8 space-y-4">
-                    {{ form.code.errors }}
                     <li>
                         <p class="text-primary text-sm" id="countdownSection">
                             زمان باقی‌مانده تا ارسال مجدد

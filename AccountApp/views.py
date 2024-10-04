@@ -48,7 +48,9 @@ class OtpVerify(View):
                 code.delete()
                 return redirect('HomeApp:Home')
             form.add_error('code', 'کد وارد شده معتبر نمیباشد.')
-        form.add_error('code',  'کد وارد شده معتبر نمیباشد.')
+        else:
+            code.delete()
+            return redirect('HomeApp:Home:')
         return render(request, 'AccountApp/login-otp.html', {'form': form})
 
 
@@ -64,10 +66,15 @@ class Login(View):
         if form.is_valid():
             cd = form.cleaned_data
             user = authenticate(username=phone, password=cd['password'])
-            login(request, user)
-            return redirect('HomeApp:Home')
-        form.add_error('password', 'رمز عبور معتبر نمیباشد.')
-        return render(request, 'AccountApp/login-password.html')
+            if user is not None:
+                login(request, user)
+                return redirect('HomeApp:Home')
+            else:
+                form.add_error('password', 'رمز عبور معتبر نمیباشد.')
+        else:
+            form.add_error('password', 'رمز عبور معتبر نمیباشد.')
+
+        return render(request, 'AccountApp/login-password.html', {'form': form})
 
 
 class Logout(View):
