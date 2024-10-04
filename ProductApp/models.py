@@ -78,7 +78,6 @@ class Comment(models.Model):
     title = models.CharField(max_length=40, null=True, blank=True)
     body = models.TextField()
     is_recommended = models.BooleanField(default=False)
-    parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='replies')
     creat_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

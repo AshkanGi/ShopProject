@@ -11,7 +11,6 @@ class ProductView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['comments'] = self.object.comments.filter(parent__isnull=True)
         context['form'] = CommentCreatForm()
         return context
 
@@ -30,12 +29,6 @@ class ProductView(DetailView):
                 comment.is_recommended = bool(int(recommend_value))
             else:
                 comment.is_recommended = False
-            parent_id = request.POST.get('parent_id')
-            if parent_id:
-                try:
-                    comment.parent = Comment.objects.get(id=parent_id)
-                except Comment.DoesNotExist:
-                    comment.parent = None
             comment.save()
             return redirect('ProductApp:detail', pk=product.pk)
         return self.get(request, *args, **kwargs)
