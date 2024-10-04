@@ -1,4 +1,7 @@
 from django.db import models
+from django.views import View
+
+from AccountApp.models import User
 
 
 class Size(models.Model):
@@ -68,3 +71,15 @@ class Introduction(models.Model):
     def __str__(self):
         return self.text[:30]
 
+
+class Comment(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='comments')
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='comments')
+    title = models.CharField(max_length=40, null=True, blank=True)
+    body = models.TextField()
+    is_recommended = models.BooleanField(default=False)
+    parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='replies')
+    creat_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'{self.user.full_name} : {self.title}'
