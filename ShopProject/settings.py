@@ -26,6 +26,8 @@ INSTALLED_APPS = [
     "ProfileApp.apps.ProfileappConfig",
     'django.contrib.humanize',
     'widget_tweaks',
+    "ProductApp.apps.ProductappConfig",
+    'django_cleanup',
 ]
 
 MIDDLEWARE = [
