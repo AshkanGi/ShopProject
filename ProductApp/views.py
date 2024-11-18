@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import DetailView
 from .forms import CommentCreatForm
@@ -20,8 +21,8 @@ class ProductView(DetailView):
         if form.is_valid():
             cd = form.cleaned_data
             comment = Comment()
-            comment.product = product
             comment.user = request.user
+            comment.product = product
             comment.title = cd['title']
             comment.body = cd['body']
             recommend_value = request.POST.get('recommend')
@@ -30,5 +31,6 @@ class ProductView(DetailView):
             else:
                 comment.is_recommended = False
             comment.save()
-            return redirect('ProductApp:detail', pk=product.pk)
+            return redirect('ProductApp:detail', slug=product.slug)
+        messages.error(request, 'اطلاعات وارد شده معتبر نیست.')
         return self.get(request, *args, **kwargs)

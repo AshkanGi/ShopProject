@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Product, Size, Color, ProductGallery, TopMaterial, SoleMaterial, InsoleModel, OpenClose
+from .models import Product, Size, Color, ProductGallery, TopMaterial, SoleMaterial, InsoleModel, OpenClose, Comment
 
 
 @admin.register(Product)
@@ -41,3 +41,6 @@ class OpenCloseAdmin(admin.ModelAdmin):
 @admin.register(ProductGallery)
 class ProductGalleryAdmin(admin.ModelAdmin):
     list_display = ('id', 'alt_text')
+
+
+admin.site.register(Comment)

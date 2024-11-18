@@ -61,11 +61,11 @@ class Product(models.Model):
     size = models.ManyToManyField(Size, 'product', verbose_name='سایز')
     air_circulation = models.BooleanField(default=False, verbose_name='گردش هوا')
     waterproof = models.BooleanField(default=False, verbose_name='ضد اب')
-    capsule_in_heel = models.BooleanField(default=False, verbose_name='کپسول فشار در قسمت پنجه')
-    capsule_in_claw = models.BooleanField(default=False, verbose_name='کپسول فشار در قسمت پاشنه')
+    capsule_in_heel = models.BooleanField(default=False, verbose_name='کپسول فشار در قسمت پاشنه')
+    capsule_in_claw = models.BooleanField(default=False, verbose_name='کپسول فشار در قسمت پنجه ')
     top_material = models.ManyToManyField(TopMaterial, 'product', verbose_name='جنس رویه')
-    sole_material = models.ManyToManyField(SoleMaterial, 'product', verbose_name='جنس کفه')
-    insole_model = models.ManyToManyField(InsoleModel, 'product', verbose_name='جنس داخل')
+    sole_material = models.ManyToManyField(SoleMaterial, 'product', verbose_name='جنس زیره')
+    insole_model = models.ManyToManyField(InsoleModel, 'product', verbose_name='جنس کفی')
     open_close = models.ManyToManyField(OpenClose, 'product', verbose_name='نحوه باز و بسته شدن')
     main_image = models.ImageField(upload_to='product/main', verbose_name='عکس اصلی')
     gallery_image = models.ManyToManyField(ProductGallery, related_name='product', verbose_name='گالری')
@@ -112,7 +112,10 @@ class Comment(models.Model):
     title = models.CharField(max_length=40, null=True, blank=True)
     body = models.TextField()
     is_recommended = models.BooleanField(default=False)
-    creat_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-created_at']
 
     def __str__(self):
         return f'{self.user.full_name} : {self.title}'
