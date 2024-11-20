@@ -1,6 +1,7 @@
 from django.contrib import messages
 from django.shortcuts import render, redirect, get_object_or_404
-from django.views.generic import DetailView
+from django.views import View
+from django.views.generic import DetailView, ListView
 from .forms import CommentCreatForm
 from .models import Product, Comment
 
