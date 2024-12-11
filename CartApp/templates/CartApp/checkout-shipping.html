@@ -1330,18 +1330,16 @@
                           <use xlink:href="#cart" />
                         </svg>
                       </span>
-                      <span
-                        class="absolute -right-2.5 -top-2.5 flex h-5 w-5 cursor-pointer items-center justify-center rounded-full bg-primary-btn text-sm font-bold text-white">
-                        {{ total_product }}
+                      <span class="absolute -right-2.5 -top-2.5 flex h-5 w-5 cursor-pointer items-center justify-center rounded-full bg-primary-btn text-sm font-bold text-white">
+                        {{ cart.total_products }}
                       </span>
                     </button>
                     {% if cart %}
                     <div
-                      class="z-10 !ml-5 hidden w-[400px] overflow-hidden rounded-lg border-t-2 border-t-primary bg-muted"
+                      class="z-10 !ml-5 hidden w-[400px] max-h-96 overflow-y-auto rounded-lg border-t-2 border-t-primary bg-muted"
                       id="dropdownBasketDesktop">
                       <!-- Head -->
                       <div class="flex items-center justify-between p-5 pb-2">
-                        <div class="text-sm text-text/90">{{ total_product }} مورد</div>
                         <a
                           class="flex items-center gap-x-1 text-sm text-primary"
                           href="{% url 'CartApp:cart_detail' %}">
@@ -1354,7 +1352,7 @@
                         </a>
                       </div>
                       <!-- Items -->
-                      <div class="h-60">
+                      <div class="h-60 overflow-y-auto">
                       {% for item in cart %}
                         <ul class="main-scroll h-full space-y-2 divide-y overflow-y-auto p-5 pl-2">
                           <li>
@@ -1369,7 +1367,7 @@
                                     src="{{ item.product.main_image.url }}"
                                   />
                                 </a>
-                                <a href="{% url 'CartApp:remove_product_basket' item.unique_id %}">
+                                <a href="{% url 'CartApp:remove_product' item.unique_id %}">
                                   <button class="absolute -right-2 -top-2 flex h-8 w-8 items-center justify-center rounded-full bg-background" type="button">
                                     <svg class="h-6 w-6 text-red-600 dark:text-red-500">
                                       <use xlink:href="#close"></use>
@@ -1379,20 +1377,24 @@
                               </div>
                               <div class="w-full space-y-1.5">
                                 <!-- Product Title -->
-                                <a
-                                  class="line-clamp-2 h-12"
-                                  href="./product-detail.html">
-                                    {{ item.product.product_name }}
+                                <a class="line-clamp-2 h-12" href="./product-detail.html">
+                                    {{ item.product.name }}
                                 </a>
                                 <!-- Product Attribute -->
                                 <div
                                   class="flex items-center gap-x-2 text-sm text-text/60">
-                                  <div>تعداد : {{ item.quantity }}</div>
+                                  <div> تعداد : {{ item.quantity }}</div>
                                   <div
                                     class="h-3 w-px rounded-full bg-background">
                                   </div>
                                   <div class="flex items-center gap-x-2">
-                                    <span> {{ item.color }}</span>
+                                    رنگ : {{ item.color }}
+                                  </div>
+                                  <div
+                                    class="h-3 w-px rounded-full bg-background">
+                                  </div>
+                                  <div>
+                                    سایز : {{ item.size }}
                                   </div>
                                 </div>
                                 <div
@@ -3430,11 +3432,8 @@
             </div>
           </div>
         </div>
-
-        <div
-          class="fixed inset-0 z-20 hidden bg-black/40 backdrop-blur-md /40"
-          id="header-overlay"
-        ></div>
+        <div class="fixed inset-0 z-20 hidden bg-black/40 backdrop-blur-md /40" id="header-overlay">
+        </div>
       </header>
       <!-- Header Mobile drawers -->
       <div>
@@ -4488,12 +4487,9 @@
             <div class="col-span-12 md:col-span-8">
               <div class="rounded-lg bg-muted p-4">
                 <!-- Address Section -->
-
                 <div class="mb-6">
                   <div class="flex items-center justify-between gap-x-2 pb-4">
-                    <h1
-                      class="flex items-center gap-x-4 text-sm xs:text-base md:text-lg"
-                    >
+                    <h1 class="flex items-center gap-x-4 text-sm xs:text-base md:text-lg">
                       آدرس تحویل سفارش
                     </h1>
                     <button
@@ -4509,10 +4505,8 @@
                       <span> آدرس جدید </span>
                     </button>
                   </div>
-
                   <fieldset class="space-y-2">
                     <legend class="sr-only">Address</legend>
-
                     <div>
                       <input
                         type="radio"
@@ -4524,81 +4518,18 @@
                       <label for="address-1" class="relative block cursor-pointer rounded-lg border p-4 shadow-base peer-checked:border-emerald-500 hover:border-border/50 peer-checked:dark:border-emerald-400 dark:hover:border-white/10">
                         <div class="mb-4 flex items-center justify-between gap-x-2 sm:mb-2">
                           {% if request.user.address.all %}
-                          <p class="line-clamp-2 h-10 text-sm text-text/90 xs:text-base sm:line-clamp-1 sm:h-6">
-                             {{ address.ostan }} -- {{ address.city }} -- {{ address.address }} -- {{ address.plak }} -- {{ address.vahed }}
-                          </p>
+                            {% with request.user.address.last as address %}
+                              <p class="line-clamp-2 h-10 text-sm text-text/90 xs:text-base sm:line-clamp-1 sm:h-6">
+                                {{ address.province }} -- {{ address.city }} -- {{ address.address }} -- اقا/خانم : {{ address.first_name }}
+                              </p>
+                            {% endwith %}
+                              {% else %}
+                              <p class="line-clamp-2 h-10 text-sm text-text/90 xs:text-base sm:line-clamp-1 sm:h-6">
+                              لطفا یک ادرس اضافه کنید.
+                              </p>
                           {% endif %}
                           <div class="hidden md:block">
-                            <button
-                              id="dropdownMenuIconButton"
-                              data-dropdown-toggle="address-option-1"
-                              type="button"
-                              class="rounded-full p-1 text-text/90 hover:bg-background hover:"
-                            >
-                              <svg class="h-6 w-6">
-                                <use xlink:href="#vertical-dot" />
-                              </svg>
-                            </button>
                             <!-- Dropdown menu -->
-                            <div
-                              class="z-10 !ml-5 hidden w-50 overflow-hidden rounded-lg border bg-muted"
-                              id="address-option-1"
-                            >
-                              <ul class="space-y-2 p-2">
-                                <li>
-                                  <button
-                                    type="button"
-                                    data-modal-target="address-edit-modal-1"
-                                    data-modal-toggle="address-edit-modal-1"
-                                    class="flex w-full items-center justify-between rounded-lg px-4 py-3 text-sky-500 hover:bg-sky-500/10 dark:text-sky-400 dark:hover:bg-sky-400/10"
-                                  >
-                                    <div class="flex items-center gap-x-2">
-                                      <svg class="h-6 w-6">
-                                        <use xlink:href="#address-edit"></use>
-                                      </svg>
-                                      <span> ویرایش </span>
-                                    </div>
-                                  </button>
-                                </li>
-                                <li>
-                                  <button
-                                    type="button"
-                                    data-modal-target="address-delete-modal-1"
-                                    data-modal-toggle="address-delete-modal-1"
-                                    class="flex w-full items-center justify-between rounded-lg px-4 py-3 text-red-500 hover:bg-warning/10 dark:text-red-400 dark:hover:bg-red-400/10"
-                                  >
-                                    <div class="flex items-center gap-x-2">
-                                      <svg class="h-6 w-6">
-                                        <use xlink:href="#address-delete"></use>
-                                      </svg>
-                                      <span> حذف </span>
-                                    </div>
-                                  </button>
-                                </li>
-                              </ul>
-                            </div>
-                          </div>
-                        </div>
-
-                        <div class="flex items-center justify-between gap-x-2">
-                          <p class="line-clamp-1 text-sm text-text/60">
-                            تایماز اکبری
-                          </p>
-                          <div class="flex items-center gap-x-2 md:hidden">
-                            <button
-                              data-modal-target="address-delete-modal-1"
-                              data-modal-toggle="address-delete-modal-1"
-                              class="btn-red-nobg px-3 py-1 text-sm xs:px-4 xs:py-2"
-                            >
-                              حذف
-                            </button>
-                            <button
-                              data-modal-target="address-edit-modal-1"
-                              data-modal-toggle="address-edit-modal-1"
-                              class="btn-secondary-nobg px-3 py-1 text-sm xs:px-4 xs:py-2"
-                            >
-                              ویرایش
-                            </button>
                           </div>
                         </div>
                       </label>
@@ -4606,7 +4537,6 @@
                   </fieldset>
                 </div>
                 <!-- Delivery Section -->
-
                 <div>
                   <div class="flex items-center justify-between gap-x-2 pb-4">
                     <h2
@@ -4703,7 +4633,7 @@
                   <!-- cart items price before discount - coupon -->
                   <div class="flex items-center justify-between gap-x-2 py-6">
                     <div class="text-sm text-text/90 lg:text-base">
-                      قیمت کالا ها ({{ total_product }})
+                      قیمت کالا ها ({{ cart.total_products }})
                     </div>
 
                     <div class="text-sm text-primary lg:text-base">
@@ -4759,9 +4689,15 @@
                   </div>
                 </div>
                 <div>
-                  <a href="{% url 'CartApp:cart_payment' %}" class="btn-primary py-3">
-                    ادامه فرایند خرید
-                  </a>
+                  {% if request.user.address.all and cart.total_products %}
+                    <a href="{% url 'CartApp:order_creat' %}" class="btn-primary py-3">
+                      ادامه فرایند خرید
+                    </a>
+                      {% else %}
+                      <span class="btn-primary py-3" style="background-color: lightgreen">
+                      ادامه فرایند خرید
+                      </span>
+                  {% endif %}
                 </div>
               </div>
               <!-- Mobile -->
@@ -4842,22 +4778,14 @@
         class="main-scroll fixed left-0 right-0 top-0 z-50 hidden h-[calc(100%-1rem)] max-h-full w-full overflow-y-auto overflow-x-hidden p-4 md:inset-0"
       >
         <div class="relative max-h-full w-full max-w-2xl">
-          <div
-            class="divide-y overflow-hidden rounded-lg bg-muted shadow ring-1 ring-gray-100 dark:ring-white/5"
-          >
+          <div class="divide-y overflow-hidden rounded-lg bg-muted shadow ring-1 ring-gray-100 dark:ring-white/5">
             <div class="px-4 py-5 sm:px-6">
               <div class="flex items-center justify-between">
                 <h3 class="md:text-lg">ثبت آدرس جدید</h3>
-
-                <button
-                  class=" "
-                  data-modal-hide="address-add-modal"
-                  type="button"
-                >
+                <button class=" " data-modal-hide="address-add-modal" type="button">
                   <svg class="h-5 w-5">
                     <use xlink:href="#close" />
                   </svg>
-
                   <span class="sr-only">Close menu</span>
                 </button>
               </div>
@@ -4877,135 +4805,78 @@
                 </div>
                 <!-- Receiver family -->
                 <div class="col-span-2 sm:col-span-1">
-                  <label
-                    for="family"
-                    class="relative block rounded-lg border shadow-base"
-                  >
+                  <label for="family" class="relative block rounded-lg border shadow-base">
                     {{ form.last_name|attr:"class:peer w-full rounded-lg border-none bg-transparent px-4 py-3 placeholder-transparent focus:outline-none focus:ring-0" }}
-
-                    <span
-                      class="pointer-events-none absolute start-2.5 top-0 -translate-y-1/2 bg-muted px-2 py-0.5 text-sm text-text/60 transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-base peer-focus:top-0 peer-focus:text-sm"
-                    >
+                    <span class="pointer-events-none absolute start-2.5 top-0 -translate-y-1/2 bg-muted px-2 py-0.5 text-sm text-text/60 transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-base peer-focus:top-0 peer-focus:text-sm">
                       نام خانوادگی گیرنده
                     </span>
                   </label>
                 </div>
                 <!-- Receiver Phone number -->
                 <div class="col-span-2 sm:col-span-1">
-                  <label
-                    for="phoneNumber"
-                    class="relative block rounded-lg border shadow-base"
-                  >
+                  <label for="phoneNumber" class="relative block rounded-lg border shadow-base">
                       {{ form.phone|attr:"class:peer w-full rounded-lg border-none bg-transparent px-4 py-3 placeholder-transparent focus:outline-none focus:ring-0" }}
-
-                    <span
-                      class="pointer-events-none absolute start-2.5 top-0 -translate-y-1/2 bg-muted px-2 py-0.5 text-sm text-text/60 transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-base peer-focus:top-0 peer-focus:text-sm"
-                    >
+                    <span class="pointer-events-none absolute start-2.5 top-0 -translate-y-1/2 bg-muted px-2 py-0.5 text-sm text-text/60 transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-base peer-focus:top-0 peer-focus:text-sm">
                       شماره تماس گیرنده
                     </span>
                   </label>
                 </div>
                 <!-- Receiver National Code -->
                 <div class="col-span-2 sm:col-span-1">
-                  <label
-                    for="nationalCode"
-                    class="relative block rounded-lg border shadow-base"
-                  >
-                    {{ form.meli_code|attr:"class:peer w-full rounded-lg border-none bg-transparent px-4 py-3 placeholder-transparent focus:outline-none focus:ring-0" }}
-
-                    <span
-                      class="pointer-events-none absolute start-2.5 top-0 -translate-y-1/2 bg-muted px-2 py-0.5 text-sm text-text/60 transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-base peer-focus:top-0 peer-focus:text-sm"
-                    >
+                  <label for="nationalCode" class="relative block rounded-lg border shadow-base">
+                    {{ form.National_code|attr:"class:peer w-full rounded-lg border-none bg-transparent px-4 py-3 placeholder-transparent focus:outline-none focus:ring-0" }}
+                    <span class="pointer-events-none absolute start-2.5 top-0 -translate-y-1/2 bg-muted px-2 py-0.5 text-sm text-text/60 transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-base peer-focus:top-0 peer-focus:text-sm">
                       کد ملی گیرنده
                     </span>
                   </label>
                 </div>
-
                 <!-- Receiver Address -->
                 <div class="col-span-2">
-                  <label
-                    for="address"
-                    class="relative block rounded-lg border shadow-base"
-                  >
+                  <label for="address" class="relative block rounded-lg border shadow-base">
                     {{ form.address|attr:"class:main-scroll peer w-full rounded-lg border-none bg-transparent px-4 py-3 placeholder-transparent focus:outline-none focus:ring-0" }}
-
-                    <span
-                      class="pointer-events-none absolute start-2.5 top-0 -translate-y-1/2 bg-muted px-2 py-0.5 text-sm text-text/60 transition-all peer-placeholder-shown:top-6 peer-placeholder-shown:text-base peer-focus:top-0 peer-focus:text-sm"
-                    >
+                    <span class="pointer-events-none absolute start-2.5 top-0 -translate-y-1/2 bg-muted px-2 py-0.5 text-sm text-text/60 transition-all peer-placeholder-shown:top-6 peer-placeholder-shown:text-base peer-focus:top-0 peer-focus:text-sm">
                       نشانی گیرنده
                     </span>
                   </label>
                 </div>
                 <!-- Receiver City -->
                 <div class="col-span-2 sm:col-span-1">
-                  <label
-                    for="city"
-                    class="relative block rounded-lg border shadow-base"
-                  >
+                  <label for="city" class="relative block rounded-lg border shadow-base">
                     {{ form.city|attr:"class:peer w-full rounded-lg border-none bg-transparent px-4 py-3 placeholder-transparent focus:outline-none focus:ring-0" }}
-
-                    <span
-                      class="pointer-events-none absolute start-2.5 top-0 -translate-y-1/2 bg-muted px-2 py-0.5 text-sm text-text/60 transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-base peer-focus:top-0 peer-focus:text-sm"
-                    >
+                    <span class="pointer-events-none absolute start-2.5 top-0 -translate-y-1/2 bg-muted px-2 py-0.5 text-sm text-text/60 transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-base peer-focus:top-0 peer-focus:text-sm">
                       شهر
                     </span>
                   </label>
                 </div>
                 <!-- Receiver Province -->
                 <div class="col-span-2 sm:col-span-1">
-                  <label
-                    for="province"
-                    class="relative block rounded-lg border shadow-base"
-                  >
-                    {{ form.ostan|attr:"class:peer w-full rounded-lg border-none bg-transparent px-4 py-3 placeholder-transparent focus:outline-none focus:ring-0" }}
-
-                    <span
-                      class="pointer-events-none absolute start-2.5 top-0 -translate-y-1/2 bg-muted px-2 py-0.5 text-sm text-text/60 transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-base peer-focus:top-0 peer-focus:text-sm"
-                    >
+                  <label for="province" class="relative block rounded-lg border shadow-base">
+                    {{ form.province|attr:"class:peer w-full rounded-lg border-none bg-transparent px-4 py-3 placeholder-transparent focus:outline-none focus:ring-0" }}
+                    <span class="pointer-events-none absolute start-2.5 top-0 -translate-y-1/2 bg-muted px-2 py-0.5 text-sm text-text/60 transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-base peer-focus:top-0 peer-focus:text-sm">
                       استان
                     </span>
                   </label>
                 </div>
                 <!-- Receiver Building Info -->
-                <div
-                  class="col-span-2 flex w-full items-center gap-x-4 gap-y-5 sm:col-span-1 sm:gap-6"
-                >
-                  <label
-                    for="buildingNumber"
-                    class="relative block w-full rounded-lg border shadow-base"
-                  >
-                    {{ form.plak|attr:"class:peer w-full rounded-lg border-none bg-transparent px-4 py-3 placeholder-transparent focus:outline-none focus:ring-0" }}
-
-                    <span
-                      class="pointer-events-none absolute start-2.5 top-0 -translate-y-1/2 bg-muted px-2 py-0.5 text-sm text-text/60 transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-base peer-focus:top-0 peer-focus:text-sm"
-                    >
+                <div class="col-span-2 flex w-full items-center gap-x-4 gap-y-5 sm:col-span-1 sm:gap-6">
+                  <label for="buildingNumber" class="relative block w-full rounded-lg border shadow-base">
+                    {{ form.license_plate|attr:"class:peer w-full rounded-lg border-none bg-transparent px-4 py-3 placeholder-transparent focus:outline-none focus:ring-0" }}
+                    <span class="pointer-events-none absolute start-2.5 top-0 -translate-y-1/2 bg-muted px-2 py-0.5 text-sm text-text/60 transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-base peer-focus:top-0 peer-focus:text-sm">
                       پلاک
                     </span>
                   </label>
-                  <label
-                    for="buildingUnit"
-                    class="relative block w-full rounded-lg border shadow-base"
-                  >
-                      {{ form.vahed|attr:"class:peer w-full rounded-lg border-none bg-transparent px-4 py-3 placeholder-transparent focus:outline-none focus:ring-0" }}
-
-                    <span
-                      class="pointer-events-none absolute start-2.5 top-0 -translate-y-1/2 bg-muted px-2 py-0.5 text-sm text-text/60 transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-base peer-focus:top-0 peer-focus:text-sm"
-                    >
+                  <label for="buildingUnit" class="relative block w-full rounded-lg border shadow-base">
+                      {{ form.Unit|attr:"class:peer w-full rounded-lg border-none bg-transparent px-4 py-3 placeholder-transparent focus:outline-none focus:ring-0" }}
+                    <span class="pointer-events-none absolute start-2.5 top-0 -translate-y-1/2 bg-muted px-2 py-0.5 text-sm text-text/60 transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-base peer-focus:top-0 peer-focus:text-sm">
                       واحد
                     </span>
                   </label>
                 </div>
                 <!-- Receiver Postal Code -->
                 <div class="col-span-2 sm:col-span-1">
-                  <label
-                    for="postalCode"
-                    class="relative block rounded-lg border shadow-base"
-                  >
-                    {{ form.code_posti|attr:"class:peer w-full rounded-lg border-none bg-transparent px-4 py-3 placeholder-transparent focus:outline-none focus:ring-0" }}
-
-                    <span
-                      class="pointer-events-none absolute start-2.5 top-0 -translate-y-1/2 bg-muted px-2 py-0.5 text-sm text-text/60 transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-base peer-focus:top-0 peer-focus:text-sm"
-                    >
+                  <label for="postalCode" class="relative block rounded-lg border shadow-base">
+                    {{ form.Postal_code|attr:"class:peer w-full rounded-lg border-none bg-transparent px-4 py-3 placeholder-transparent focus:outline-none focus:ring-0" }}
+                    <span class="pointer-events-none absolute start-2.5 top-0 -translate-y-1/2 bg-muted px-2 py-0.5 text-sm text-text/60 transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-base peer-focus:top-0 peer-focus:text-sm">
                       کد پستی
                     </span>
                   </label>
@@ -5060,10 +4931,7 @@
               <div class="grid grid-cols-2 gap-x-4 gap-y-5 sm:gap-6">
                 <!-- Receiver name -->
                 <div class="col-span-2 sm:col-span-1">
-                  <label
-                    for="name"
-                    class="relative block rounded-lg border shadow-base"
-                  >
+                  <label for="name" class="relative block rounded-lg border shadow-base">
                     <input
                       type="text"
                       id="name"
@@ -5071,10 +4939,7 @@
                       value="تایماز"
                       placeholder="نام گیرنده"
                     />
-
-                    <span
-                      class="pointer-events-none absolute start-2.5 top-0 -translate-y-1/2 bg-muted px-2 py-0.5 text-sm text-text/60 transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-base peer-focus:top-0 peer-focus:text-sm"
-                    >
+                    <span class="pointer-events-none absolute start-2.5 top-0 -translate-y-1/2 bg-muted px-2 py-0.5 text-sm text-text/60 transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-base peer-focus:top-0 peer-focus:text-sm">
                       نام گیرنده
                     </span>
                   </label>

@@ -4,5 +4,5 @@ from . import views
 app_name = 'ProductApp'
 
 urlpatterns = [
-    re_path(r'(?P<slug>[-\w]+)/', views.ProductView.as_view(), name='detail'),
+    re_path(r'(?P<slug>[-\w]+)/', views.ProductView.as_view(), name='product_detail'),
 ]

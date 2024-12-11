@@ -1,16 +1,20 @@
 from django.contrib import admin
-from . import models
-from .models import Address
+from .models import Address, OrderItem, Order, DiscountCode
 
 
 class OrderItemAdmin(admin.TabularInline):
-    model = models.OrderItem
+    model = OrderItem
 
 
-@admin.register(models.Order)
+@admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
     list_display = ('user', 'is_paid')
     inlines = [OrderItemAdmin]
+
+
+@admin.register(DiscountCode)
+class DiscountCodeAdmin(admin.ModelAdmin):
+    list_display = ('name', 'quantity', 'discount')
 
 
 admin.site.register(Address)

@@ -1,9 +1,9 @@
 from django.contrib import messages
-from django.shortcuts import render, redirect, get_object_or_404
-from django.views import View
-from django.views.generic import DetailView, ListView
 from .forms import CommentCreatForm
 from .models import Product, Comment
+from CartApp.cart_module import Cart
+from django.shortcuts import redirect
+from django.views.generic import DetailView
 
 
 class ProductView(DetailView):
@@ -14,6 +14,7 @@ class ProductView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['form'] = CommentCreatForm()
+        context['cart'] = Cart(self.request)
         return context
 
     def post(self, request, *args, **kwargs):
@@ -32,6 +33,6 @@ class ProductView(DetailView):
             else:
                 comment.is_recommended = False
             comment.save()
-            return redirect('ProductApp:detail', slug=product.slug)
-        messages.error(request, 'اطلاعات وارد شده معتبر نیست.')
+            return redirect('ProductApp:product_detail', slug=product.slug)
+        messages.error(request, 'اطلاعات وارد شده مناسب  نیست , لطفا مجدد تلاش کنید.')
         return self.get(request, *args, **kwargs)

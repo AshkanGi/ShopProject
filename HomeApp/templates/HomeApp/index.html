@@ -1329,18 +1329,16 @@
                           <use xlink:href="#cart" />
                         </svg>
                       </span>
-                      <span
-                        class="absolute -right-2.5 -top-2.5 flex h-5 w-5 cursor-pointer items-center justify-center rounded-full bg-primary-btn text-sm font-bold text-white">
-                        {{ total_product }}
+                      <span class="absolute -right-2.5 -top-2.5 flex h-5 w-5 cursor-pointer items-center justify-center rounded-full bg-primary-btn text-sm font-bold text-white">
+                        {{ cart.total_products }}
                       </span>
                     </button>
                     {% if cart %}
                     <div
-                      class="z-10 !ml-5 hidden w-[400px] overflow-hidden rounded-lg border-t-2 border-t-primary bg-muted"
+                      class="z-10 !ml-5 hidden w-[400px] max-h-96 overflow-y-auto rounded-lg border-t-2 border-t-primary bg-muted"
                       id="dropdownBasketDesktop">
                       <!-- Head -->
                       <div class="flex items-center justify-between p-5 pb-2">
-                        <div class="text-sm text-text/90">{{ total_product }} مورد</div>
                         <a
                           class="flex items-center gap-x-1 text-sm text-primary"
                           href="{% url 'CartApp:cart_detail' %}">
@@ -1353,7 +1351,7 @@
                         </a>
                       </div>
                       <!-- Items -->
-                      <div class="h-60">
+                      <div class="h-60 overflow-y-auto">
                       {% for item in cart %}
                         <ul class="main-scroll h-full space-y-2 divide-y overflow-y-auto p-5 pl-2">
                           <li>
@@ -1368,7 +1366,7 @@
                                     src="{{ item.product.main_image.url }}"
                                   />
                                 </a>
-                                <a href="{% url 'CartApp:remove_product_basket' item.unique_id %}">
+                                <a href="{% url 'CartApp:remove_product' item.unique_id %}">
                                   <button class="absolute -right-2 -top-2 flex h-8 w-8 items-center justify-center rounded-full bg-background" type="button">
                                     <svg class="h-6 w-6 text-red-600 dark:text-red-500">
                                       <use xlink:href="#close"></use>
@@ -1378,20 +1376,24 @@
                               </div>
                               <div class="w-full space-y-1.5">
                                 <!-- Product Title -->
-                                <a
-                                  class="line-clamp-2 h-12"
-                                  href="./product-detail.html">
-                                    {{ item.product.product_name }}
+                                <a class="line-clamp-2 h-12" href="./product-detail.html">
+                                    {{ item.product.name }}
                                 </a>
                                 <!-- Product Attribute -->
                                 <div
                                   class="flex items-center gap-x-2 text-sm text-text/60">
-                                  <div>تعداد : {{ item.quantity }}</div>
+                                  <div> تعداد : {{ item.quantity }}</div>
                                   <div
                                     class="h-3 w-px rounded-full bg-background">
                                   </div>
                                   <div class="flex items-center gap-x-2">
-                                    <span> {{ item.color }}</span>
+                                    رنگ : {{ item.color }}
+                                  </div>
+                                  <div
+                                    class="h-3 w-px rounded-full bg-background">
+                                  </div>
+                                  <div>
+                                    سایز : {{ item.size }}
                                   </div>
                                 </div>
                                 <div

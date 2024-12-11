@@ -1,5 +1,6 @@
 from ProductApp.models import Product
 
+
 CAR_SESSION_ID = 'cart'
 
 
@@ -46,7 +47,7 @@ class Cart:
         del self.session[CAR_SESSION_ID]
         self.session.modified = True
 
-    def __len__(self):
+    def total_products(self):
         return sum(int(item['quantity']) for item in self.cart.values())
 
     def total_price(self):

@@ -46,18 +46,18 @@ class VerifyCode(View):
 
     def post(self, request):
         form = OTPVerifyForm(request.POST)
-        user_info = request.session.get('user_info', {})
+        user_info = request.session.get('username_info', {})
         username = user_info.get('username')
         if not username:
             messages.error(request, "مشکلی در ارتباط با سرور به وجود آمد. لطفا مجدد تلاش کنید.")
-            return redirect('AccountApp:Register')
+            return redirect('AccountApp:register')
         if form.is_valid():
             cd = form.cleaned_data
             try:
                 otp_instance = OTP.objects.get(username=username)
             except OTP.DoesNotExist:
                 messages.error(request, "مشکلی در ارتباط با سرور به وجود آمد. لطفا مجدد تلاش کنید.")
-                return redirect('AccountApp:Register')
+                return redirect('AccountApp:register')
             if cd['code'] == otp_instance.code:
                 user = User.objects.create(username=username)
                 login(request, user)

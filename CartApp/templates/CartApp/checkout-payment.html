@@ -1329,18 +1329,16 @@
                           <use xlink:href="#cart" />
                         </svg>
                       </span>
-                      <span
-                        class="absolute -right-2.5 -top-2.5 flex h-5 w-5 cursor-pointer items-center justify-center rounded-full bg-primary-btn text-sm font-bold text-white">
-                        {{ total_product }}
+                      <span class="absolute -right-2.5 -top-2.5 flex h-5 w-5 cursor-pointer items-center justify-center rounded-full bg-primary-btn text-sm font-bold text-white">
+                        {{ cart.total_products }}
                       </span>
                     </button>
                     {% if cart %}
                     <div
-                      class="z-10 !ml-5 hidden w-[400px] overflow-hidden rounded-lg border-t-2 border-t-primary bg-muted"
+                      class="z-10 !ml-5 hidden w-[400px] max-h-96 overflow-y-auto rounded-lg border-t-2 border-t-primary bg-muted"
                       id="dropdownBasketDesktop">
                       <!-- Head -->
                       <div class="flex items-center justify-between p-5 pb-2">
-                        <div class="text-sm text-text/90">{{ total_product }} مورد</div>
                         <a
                           class="flex items-center gap-x-1 text-sm text-primary"
                           href="{% url 'CartApp:cart_detail' %}">
@@ -1353,7 +1351,7 @@
                         </a>
                       </div>
                       <!-- Items -->
-                      <div class="h-60">
+                      <div class="h-60 overflow-y-auto">
                       {% for item in cart %}
                         <ul class="main-scroll h-full space-y-2 divide-y overflow-y-auto p-5 pl-2">
                           <li>
@@ -1368,7 +1366,7 @@
                                     src="{{ item.product.main_image.url }}"
                                   />
                                 </a>
-                                <a href="{% url 'CartApp:remove_product_basket' item.unique_id %}">
+                                <a href="{% url 'CartApp:remove_product' item.unique_id %}">
                                   <button class="absolute -right-2 -top-2 flex h-8 w-8 items-center justify-center rounded-full bg-background" type="button">
                                     <svg class="h-6 w-6 text-red-600 dark:text-red-500">
                                       <use xlink:href="#close"></use>
@@ -1378,20 +1376,24 @@
                               </div>
                               <div class="w-full space-y-1.5">
                                 <!-- Product Title -->
-                                <a
-                                  class="line-clamp-2 h-12"
-                                  href="./product-detail.html">
-                                    {{ item.product.product_name }}
+                                <a class="line-clamp-2 h-12" href="./product-detail.html">
+                                    {{ item.product.name }}
                                 </a>
                                 <!-- Product Attribute -->
                                 <div
                                   class="flex items-center gap-x-2 text-sm text-text/60">
-                                  <div>تعداد : {{ item.quantity }}</div>
+                                  <div> تعداد : {{ item.quantity }}</div>
                                   <div
                                     class="h-3 w-px rounded-full bg-background">
                                   </div>
                                   <div class="flex items-center gap-x-2">
-                                    <span> {{ item.color }}</span>
+                                    رنگ : {{ item.color }}
+                                  </div>
+                                  <div
+                                    class="h-3 w-px rounded-full bg-background">
+                                  </div>
+                                  <div>
+                                    سایز : {{ item.size }}
                                   </div>
                                 </div>
                                 <div
@@ -4358,7 +4360,6 @@
               <li>
                 <div class="flex gap-x-2 py-5">
                   <!-- Product Image -->
-
                   <div class="relative min-w-fit">
                     <a href="./product-detail.html">
                       <img
@@ -4486,16 +4487,15 @@
               </li>
             </ol>
           </div>
-
           <div class="mx-auto max-w-[450px] rounded-lg bg-muted p-5">
             <!-- Head -->
             <h1 class="mb-8 text-center text-lg lg:text-xl">جزئیات سفارش</h1>
-
             <div class="mb-6">
               <!-- Coupon -->
+              <form  method="post" action="{% url 'CartApp:discount' order.id %}">
               <div class="mb-4 flex items-center justify-between gap-x-2">
                 <div class="flex w-full items-center justify-between gap-x-2 rounded-lg border pl-4">
-                  <form  method="post">
+
                   {% csrf_token %}
                   <label for="coupon" class="relative block w-full rounded-lg shadow-base">
                     <input
@@ -4509,15 +4509,13 @@
                       کد تخفیف
                     </span>
                   </label>
-                  </form>
                   <button class="btn-primary-nobg py-2">اعمال</button>
                 </div>
               </div>
-
+              </form>
               <!-- delivery price -->
               <div class="flex items-center justify-between gap-x-2 py-6">
                 <div class="text-sm text-text/90 lg:text-base">هزینه ارسال</div>
-
                 <!-- <div class="text-sky-500 dark:text-sky-400  text-sm lg:text-base">
                       <span class="font-bold">60,000</span>
                       <span class="text-xs lg:text-sm">تومان</span>
@@ -4528,9 +4526,7 @@
                         پرداخت در مقصد
                       </span>
                     </div> -->
-                <div
-                  class="text-sm text-sky-500 dark:text-sky-400 lg:text-base"
-                >
+                <div class="text-sm text-sky-500 dark:text-sky-400 lg:text-base">
                   <span class="font-bold"> رایگان </span>
                 </div>
               </div>
@@ -4551,9 +4547,8 @@
                 <div class="text-sm text-text/90 lg:text-base">
                   مبلغ قابل پرداخت
                 </div>
-
                 <div class="text-sm text-primary lg:text-base">
-                  <span class="font-bold">{{ cart.total_price|intcomma }}</span>
+                  <span class="font-bold">{{ order.total_price|intcomma }}</span>
                   <span class="text-xs lg:text-sm">تومان</span>
                 </div>
               </div>
@@ -4615,8 +4610,24 @@
               </fieldset>
             </div>
             <div>
-              <a href="#" class="btn-primary py-4"> پرداخت </a>
+              {% if cart.total_price %}
+                <form  method="post">
+                {% csrf_token %}
+                  <a href="#" class="btn-primary py-4"> پرداخت </a>
+                </form>
+              {% else %}
+                <span class="btn-primary py-3" style="background-color: lightgreen"> پرداخت </span>
+              {% endif %}
             </div>
+          <div>
+              {% if message %}
+                  {% for message in messages %}
+                      <p class="h-5 text-sm text-red-500 dark:text-red-400">
+                          {{ message }}
+                      </p>
+                  {% endfor %}
+              {% endif %}
+          </div>
           </div>
         </div>
       </main>
