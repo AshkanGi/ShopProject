@@ -3,10 +3,7 @@ from .cart_module import Cart
 from .forms import AddAddressForm
 from ProductApp.models import Product
 from .models import Order, OrderItem, Address, DiscountCode
-from django.shortcuts import render, redirect, get_object_or_404, HttpResponse
-from django.conf import settings
-import requests
-import json
+from django.shortcuts import render, redirect, get_object_or_404
 
 
 class CartDetail(View):

@@ -5,6 +5,14 @@ from AccountApp.models import User
 from django.core.validators import MinValueValidator, MaxValueValidator
 
 
+class Category(models.Model):
+    parent = models.ForeignKey('self', blank=True, null=True, on_delete=models.CASCADE, related_name='subs')
+    title = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.title
+
+
 class Color(models.Model):
     color = models.CharField(max_length=25, verbose_name='رنگ')
 
@@ -56,6 +64,7 @@ class OpenClose(models.Model):
 
 
 class Product(models.Model):
+    category = models.ManyToManyField(Category)
     name = models.CharField(max_length=150, unique=True, verbose_name='نام محصول')
     color = models.ManyToManyField(Color, 'product', verbose_name='رنگ')
     size = models.ManyToManyField(Size, 'product', verbose_name='سایز')

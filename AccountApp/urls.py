@@ -2,15 +2,18 @@ from . import views
 from django.urls import path
 
 app_name = 'AccountApp'
-urlpatterns = [
-    path('register', views.Register.as_view(), name='register'),
-    path('verify_code', views.VerifyCode.as_view(), name='verify_code'),
-    path('login', views.Login.as_view(), name='login'),
-    path('logout', views.Logout.as_view(), name='logout'),
-    path('forget', views.Forget.as_view(), name='forget'),
-    path('forget_otp', views.ForgetOTPVerify.as_view(), name='forget_otp'),
-    path('reset_password', views.ResetPassword.as_view(), name='reset_password'),
-    path('enter_otp', views.EnterOTP.as_view(), name='enter_otp'),
-    path('enter_otp_verify', views.EnterOTPVerify.as_view(), name='enter_otp_verify'),
-    path('resend_otp', views.ResendOTP.as_view(), name='resend_otp'),
+
+url_patterns_data = [
+    ('register', views.RegisterView),
+    ('verify_code', views.VerifyCodeView),
+    ('login', views.LoginView),
+    ('logout', views.LogoutView),
+    ('forget', views.ForgetView),
+    ('forget_otp', views.ForgetOTPVerifyView),
+    ('reset_password', views.ResetPasswordView),
+    ('enter_otp', views.EnterOTPView),
+    ('enter_otp_verify', views.EnterOTPVerifyView),
+    ('resend_otp', views.ResendOTPView),
 ]
+
+urlpatterns = [path(f'{pattern}', view.as_view(), name=pattern) for pattern, view in url_patterns_data]

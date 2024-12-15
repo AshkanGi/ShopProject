@@ -48,7 +48,7 @@ class RegisterForm(forms.Form):
         elif re.match(phone, username):
             return username
         else:
-            raise forms.ValidationError('لطفا یک ایمیل معتبر یا شماره تلفن 11 رقمی وارد کنید')
+            raise forms.ValidationError('ورودی معتبر نیست. لطفا یک ایمیل معتبر یا شماره تلفن 11 رقمی وارد کنید')
 
 
 class OTPVerifyForm(forms.Form):

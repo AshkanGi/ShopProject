@@ -1,6 +1,8 @@
 from django.db import models
-from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
+from datetime import timedelta
 from django.utils import timezone
+from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
+from django_celery_beat.utils import now
 
 
 class UserManager(BaseUserManager):
@@ -21,12 +23,14 @@ class UserManager(BaseUserManager):
 
 class User(AbstractBaseUser):
     username = models.CharField(max_length=50, unique=True)
-    full_name = models.CharField(max_length=30, blank=True, null=True)
+    full_name = models.CharField(max_length=50, blank=True, null=True)
     phone = models.CharField(max_length=11, unique=True, null=True, blank=True)
     email = models.EmailField(max_length=255, unique=True, blank=True, null=True)
 
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
+    date_joined = models.DateTimeField(default=now)
+    last_login = models.DateTimeField(blank=True, null=True)
     objects = UserManager()
     USERNAME_FIELD = "username"
     REQUIRED_FIELDS = []
@@ -48,8 +52,15 @@ class User(AbstractBaseUser):
 class OTP(models.Model):
     username = models.CharField(max_length=50)
     code = models.CharField(max_length=5)
-    creat_at = models.DateTimeField(auto_now_add=True)
-    last_send = models.DateTimeField(default=timezone.now)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def is_expired(self):
+        return self.created_at + timedelta(minutes=2) < timezone.now()
 
     def __str__(self):
-        return self.username
+        return f"OTP for {self.username}: {self.code}"
+
+    class Meta:
+        verbose_name = "One-Time Password"
+        verbose_name_plural = "One-Time Passwords"
+        ordering = ["-created_at"]

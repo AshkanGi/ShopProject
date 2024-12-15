@@ -947,26 +947,23 @@
                     <p class="h-5 text-sm text-red-500 dark:text-red-400">
                         {{ form.code.errors }}
                     </p>
-                    {% if message %}
-                    	{% for message in messages %}
-                    		<p class="h-5 text-sm text-red-500 dark:text-red-400">
-                               {{ message }}
-                            </p>
-                    	{% endfor %}
+                    {% if messages %}
+                      {% for message in messages %}
+                        <p style="color: #e5e7eb">{{ message }}</p>
+                      {% endfor %}
                     {% endif %}
                 </div>
                 <ul class="mb-8 space-y-4">
                     <li>
                         <p class="text-primary text-sm" id="countdownSection">
                             زمان باقی‌مانده تا ارسال مجدد
-                            <span id="countdown" class="font-bold">0:5</span>
+                            <span id="countdown" class="font-bold">2:0</span>
                         </p>
                         <button
-                                id="resendButton"
-                                onclick="resendOTP()"
-                                class="hidden">
-                            <span> ارسال مجدد </span>
-                            <span><svg class="h-5 w-5"><use xlink:href="#chevron-left" /></svg></span>
+                          id="resendButton"
+                          onclick="resendOTP()"
+                          class="hidden">
+                          <span> ارسال مجدد </span>
                         </button>
                     </li>
                 </ul>
@@ -979,8 +976,8 @@
 </div>
 <script>
     // تنظیمات تایمر برای ارسال مجدد کد، در اینجا 2 دقیقه تنظیم شده
-let countdownMinutes = 0;
-let countdownSeconds = 5;
+let countdownMinutes = 2;
+let countdownSeconds = 0;
 let countdownInterval;
 
 // به‌روزرسانی تایمر نمایش
@@ -988,7 +985,7 @@ function updateCountdown() {
     const countdownElement = document.getElementById("countdown");
     countdownElement.textContent = `${countdownMinutes.toString().padStart(0, "5")}:${countdownSeconds
         .toString()
-        .padStart(0, "5")}`;
+        .padStart(2, "5")}`;
 }
 
 // شروع شمارش معکوس تایمر
@@ -1029,8 +1026,8 @@ function resendOTP() {
         .then((data) => {
             if (data.success) {
                 // تنظیم مجدد تایمر
-                countdownMinutes = 0;
-                countdownSeconds = 5;
+                countdownMinutes = 2;
+                countdownSeconds = 0;
                 updateCountdown();
                 document.getElementById("resendButton").classList.add("hidden");
                 document.getElementById("resendButton").disabled = true;

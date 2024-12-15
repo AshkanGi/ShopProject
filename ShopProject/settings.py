@@ -28,7 +28,7 @@ INSTALLED_APPS = [
     'widget_tweaks',
     "ProductApp.apps.ProductappConfig",
     'django_cleanup',
-    "CartApp.apps.CartappConfig"
+    "CartApp.apps.CartappConfig",
 ]
 
 MIDDLEWARE = [
@@ -88,7 +88,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'en-uk'
 
 TIME_ZONE = 'UTC'
 
@@ -101,6 +101,9 @@ STATIC_URL = 'static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 MEDIA_URL = '/media/'
 MEDIA_ROOT = path.join(BASE_DIR, 'media')
+
+SESSION_COOKIE_AGE = 3600
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = "AccountApp.User"
