@@ -1,15 +1,15 @@
 from ProductApp.models import Product
 
 
-CAR_SESSION_ID = 'cart'
+CART_SESSION_ID = 'cart'
 
 
 class Cart:
     def __init__(self, request):
         self.session = request.session
-        cart = self.session.get(CAR_SESSION_ID)
+        cart = self.session.get(CART_SESSION_ID)
         if not cart:
-            cart = self.session[CAR_SESSION_ID] = {}
+            cart = self.session[CART_SESSION_ID] = {}
         self.cart = cart
 
     def __iter__(self):
@@ -44,7 +44,7 @@ class Cart:
             self.session.modified = True
 
     def clear(self):
-        del self.session[CAR_SESSION_ID]
+        self.session.pop(CART_SESSION_ID, None)
         self.session.modified = True
 
     def total_products(self):
