@@ -1,7 +1,5 @@
-from django.shortcuts import render
-from django.views.generic import TemplateView
-
 from CartApp.cart_module import Cart
+from django.views.generic import TemplateView
 
 
 class HomeView(TemplateView):

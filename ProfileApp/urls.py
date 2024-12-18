@@ -1,14 +1,18 @@
-from django.urls import path
 from . import views
-
+from django.urls import path
 
 app_name = 'ProfileApp'
-urlpatterns = [
-    path('', views.ProfileDashboard.as_view(), name='profile_dashboard'),
-    path('orders', views.ProfileOrders.as_view(), name='profile_orders'),
-    path('favorite', views.ProfileFavorites.as_view(), name='profile_favorite'),
-    path('recent', views.ProfileRecent.as_view(), name='profile_recent'),
-    path('notification', views.ProfileNotification.as_view(), name='profile_notification'),
-    path('address', views.ProfileAddress.as_view(), name='profile_address'),
-    path('edit', views.ProfileEdit.as_view(), name='profile_edit'),
+
+url_patterns_data = [
+    ('', views.ProfileDashboard),  # Dashboard
+    ('profile_orders', views.ProfileOrders),
+    ('profile_favorite', views.ProfileFavorites),
+    ('profile_recent', views.ProfileRecent),
+    ('profile_notification', views.ProfileNotification),
+    ('profile_address', views.ProfileAddress),
+    ('profile_edit', views.ProfileEdit),
+    ('update_email', views.UpdateEmail),
+    ('update_phone', views.UpdatePhone),
 ]
+
+urlpatterns = [path(f'{pattern}/', view.as_view(), name=pattern or 'profile_dashboard') for pattern, view in url_patterns_data]

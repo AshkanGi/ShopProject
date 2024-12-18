@@ -1,16 +1,20 @@
 from django.contrib import admin
-from .models import Product, Size, Color, ProductGallery, TopMaterial, SoleMaterial, InsoleModel, OpenClose, Comment , Category
+from .models import Product, Size, Color, ProductGallery, TopMaterial, SoleMaterial, InsoleModel, OpenClose, Comment, Category
 
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'slug', 'price', 'discount_percentage', 'discounted_price', 'created_at', 'update_at')
     exclude = ('slug',)
+    list_filter = ('created_at', 'update_at', 'discount_percentage')
+    search_fields = ('name', 'slug')
 
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ('title', 'parent')
+    list_filter = ('parent',)
+    search_fields = ('title',)
 
 
 @admin.register(Color)
