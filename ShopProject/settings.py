@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     "ProductApp.apps.ProductappConfig",
     'django_cleanup',
     "CartApp.apps.CartappConfig",
+    "TestApp.apps.TestappConfig"
 ]
 
 MIDDLEWARE = [
