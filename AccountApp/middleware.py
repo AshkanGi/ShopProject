@@ -18,5 +18,5 @@ class RedirectAuthenticatedUserMiddleware:    # بعد از لاگین به ای
 
     def __call__(self, request):
         if request.user.is_authenticated and request.path in self.restricted_urls:
-            return redirect('HomeApp:Home')
+            return redirect('core:Home')
         return self.get_response(request)
