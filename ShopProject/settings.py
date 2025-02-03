@@ -22,7 +22,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     "core.apps.HomeappConfig",
-    "AccountApp.apps.AccountappConfig",
+    "account.apps.AccountappConfig",
     "ProfileApp.apps.ProfileappConfig",
     'django.contrib.humanize',
     'widget_tweaks',
@@ -40,7 +40,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'AccountApp.middleware.RedirectAuthenticatedUserMiddleware',
+    'account.middleware.RedirectAuthenticatedUserMiddleware',
 ]
 
 ROOT_URLCONF = 'ShopProject.urls'
@@ -107,7 +107,7 @@ SESSION_COOKIE_AGE = 3600
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-AUTH_USER_MODEL = "AccountApp.User"
+AUTH_USER_MODEL = "account.User"
 
 
 EMAIL_HOST = 'smtp.gmail.com'

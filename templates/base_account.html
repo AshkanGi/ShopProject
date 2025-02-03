@@ -4,15 +4,14 @@
   <head>
     <meta charset="UTF-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <title>ورود / ثبت نام</title>
+    <title>فراموشی کلمه عبور</title>
 
     <link href="{% static 'assets/css/fonts.css' %}" rel="stylesheet" />
     <link href="{% static 'assets/css/app.css' %}" rel="stylesheet" />
     <link href="{% static 'assets/css/theme.css' %}" rel="stylesheet" />
 
-    <script src="{% static 'assets/scripts/mount.js'%}"></script>
+    <script src="{% static 'assets/scripts/mount.js' %}"></script>
   </head>
-
   <body>
     <div class="sr-only">
       <svg>
@@ -932,60 +931,8 @@
         </symbol>
       </svg>
     </div>
-    <div class="flex min-h-screen items-center justify-center bg-background">
-      <div class="container">
-        <div class="relative mx-auto max-w-[450px] rounded-xl bg-muted p-5 shadow-base md:p-10">
-          <!-- Return -->
-          <a
-          href="{% url 'AccountApp:login' %}"
-          class="absolute -top-3.5 -right-3.5 hover:dark:bg-muted shadow-base hover:bg-muted text-white hover:text-primary transition-all duration-200 hover: w-10 h-10 flex items-center justify-center rounded-full bg-primary">
-            <svg class="w-8 h-8">
-              <use xlink:href="#chevron-right" />
-            </svg>
-          </a>
-          <!-- Logo -->
-          <a href="{% url 'core:Home' %}"><img src="{% static 'assets/images/logo.svg' %}" class="mx-auto mb-10 w-40" alt=""/></a>
-          <h1 class="mb-10 text-lg">کلمه عبور را وارد کنید</h1>
-          <form method="post">
-            {% csrf_token %}
-            <div class="mb-4 space-y-4">
-              <label
-                for="username"
-                class="relative block rounded-lg border shadow-base">
-                {{ form.password }}
-              </label>
-              <p class="h-5 text-sm text-red-500 dark:text-red-400">
-                  {{ form.password.errors }}
-              </p>
-            </div>
-            <ul class="mb-8 space-y-4">
-              <li>
-                <a href="{% url 'AccountApp:enter_otp' %}" class="btn-primary-nobg text-sm w-fit">
-                  <span>ورود با رمز یک بار مصرف</span>
-                  <span>
-                    <svg class="h-5 w-5">
-                      <use xlink:href="#chevron-left" />
-                    </svg>
-                  </span>
-                </a>
-              </li>
-              <li>
-                <a href="{% url 'AccountApp:forget' %}" class="btn-primary-nobg text-sm w-fit">
-                  <span> فراموشی رمز عبور </span>
-                  <span>
-                    <svg class="h-5 w-5">
-                      <use xlink:href="#chevron-left" />
-                    </svg>
-                  </span>
-                </a>
-              </li>
-            </ul>
-            <div>
-              <button class="btn-primary w-full py-3">ورود</button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
+    {% block main %}
+    	
+    {% endblock %}
   </body>
 </html>

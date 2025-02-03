@@ -1,5 +1,5 @@
 from random import randint
-from AccountApp.models import OTP
+from account.models import OTP
 from django.core.mail import send_mail
 
 

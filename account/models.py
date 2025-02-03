@@ -1,8 +1,8 @@
 from django.db import models
 from datetime import timedelta
 from django.utils import timezone
-from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
 from django_celery_beat.utils import now
+from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
 
 
 class UserManager(BaseUserManager):

@@ -1,7 +1,7 @@
 import random
 from slugify import slugify
 from django.db import models
-from AccountApp.models import User
+from account.models import User
 from django.core.validators import MinValueValidator, MaxValueValidator
 
 
