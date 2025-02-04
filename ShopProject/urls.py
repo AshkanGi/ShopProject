@@ -9,5 +9,5 @@ urlpatterns = [
     path('user/', include('account.urls')),
     path('profile/', include('ProfileApp.urls')),
     path('product/', include('ProductApp.urls')),
-    path('checkout/', include('CartApp.urls')),
+    path('checkout/', include('cart.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

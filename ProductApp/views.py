@@ -1,7 +1,7 @@
 from django.contrib import messages
 from .forms import CommentCreatForm
 from .models import Product, Comment
-from CartApp.cart_module import Cart
+from cart.cart_module import Cart
 from django.shortcuts import redirect
 from django.views.generic import DetailView
 

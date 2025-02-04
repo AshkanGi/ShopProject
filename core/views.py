@@ -1,6 +1,6 @@
 from django.views import View
 from django.shortcuts import render
-from CartApp.cart_module import Cart
+from cart.cart_module import Cart
 from django.views.generic import TemplateView
 
 

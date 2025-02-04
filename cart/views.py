@@ -9,7 +9,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 class CartDetail(View):
     def get(self, request):
         cart = Cart(request)
-        return render(request, 'CartApp/checkout-cart.html', {'cart': cart})
+        return render(request, 'cart/checkout-cart.html', {'cart': cart})
 
 
 class CartAdd(View):
@@ -20,28 +20,28 @@ class CartAdd(View):
         quantity = request.POST.get('quantity')
         product = get_object_or_404(Product, id=pk)
         cart.add(product, quantity, color, size)
-        return redirect('CartApp:cart_detail')
+        return redirect('cart:cart_detail')
 
 
 class CartRemove(View):
     def get(self, request, id):
         cart = Cart(request)
         cart.remove(id)
-        return redirect('CartApp:cart_detail')
+        return redirect('cart:cart_detail')
 
 
 class CartClear(View):
     def get(self, request):
         cart = Cart(request)
         cart.clear()
-        return redirect('CartApp:cart_detail')
+        return redirect('cart:cart_detail')
 
 
 class CartShipping(View):
     def get(self, request):
         cart = Cart(request)
         form = AddAddressForm()
-        return render(request, 'CartApp/checkout-shipping.html', {'cart': cart, 'form': form})
+        return render(request, 'cart/checkout-shipping.html', {'cart': cart, 'form': form})
 
     def post(self, request):
         form = AddAddressForm(request.POST)
@@ -50,15 +50,15 @@ class CartShipping(View):
             address = form.save(commit=False)
             address.user = request.user
             address.save()
-            return redirect('CartApp:cart_shipping')
-        return render(request, 'CartApp/checkout-shipping.html', {'form': form})
+            return redirect('cart:cart_shipping')
+        return render(request, 'cart/checkout-shipping.html', {'form': form})
 
 
 class CartPayment(View):
     def get(self, request, pk):
         cart = Cart(request)
         order = get_object_or_404(Order, id=pk)
-        return render(request, 'CartApp/checkout-payment.html', {'cart': cart, 'order': order})
+        return render(request, 'cart/checkout-payment.html', {'cart': cart, 'order': order})
 
 
 class OrderCreation(View):
@@ -68,7 +68,7 @@ class OrderCreation(View):
         order = Order.objects.create(user=request.user, total_price=int(cart.total_price()))
         for item in cart:
             OrderItem.objects.create(order=order, product=item['product'], color=item['color'], size=item['size'], quantity=item['quantity'], price=item['price'])
-        return redirect('CartApp:cart_payment', order.id)
+        return redirect('cart:cart_payment', order.id)
 
 
 class ApplyDiscount(View):
@@ -80,4 +80,4 @@ class ApplyDiscount(View):
         order.save()
         discount.quantity -= 1
         discount.save()
-        return redirect('CartApp:cart_payment', order.id)
+        return redirect('cart:cart_payment', order.id)

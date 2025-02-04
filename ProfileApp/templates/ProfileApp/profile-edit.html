@@ -1341,7 +1341,7 @@
                       <div class="flex items-center justify-between p-5 pb-2">
                         <a
                           class="flex items-center gap-x-1 text-sm text-primary"
-                          href="{% url 'CartApp:cart_detail' %}">
+                          href="{% url 'cart:cart_detail' %}">
                           <div>مشاهده سبد خرید</div>
                           <div>
                             <svg class="h-5 w-5">
@@ -1366,7 +1366,7 @@
                                     src="{{ item.product.main_image.url }}"
                                   />
                                 </a>
-                                <a href="{% url 'CartApp:remove_product' item.unique_id %}">
+                                <a href="{% url 'cart:remove_product' item.unique_id %}">
                                   <button class="absolute -right-2 -top-2 flex h-8 w-8 items-center justify-center rounded-full bg-background" type="button">
                                     <svg class="h-6 w-6 text-red-600 dark:text-red-500">
                                       <use xlink:href="#close"></use>
@@ -1424,7 +1424,7 @@
                             <span class="text-sm">تومان</span>
                           </div>
                         </div>
-                        <a href="{% url 'CartApp:cart_shipping' %}">
+                        <a href="{% url 'cart:cart_shipping' %}">
                           <button
                             class="btn-primary w-32 py-3 text-sm"
                             type="button">
